@@ -16,4 +16,4 @@ App.use('/api/v1',UserRoutes)
 App.get('/',(req,res)=>{
     res.status(200).send({message:"welcome to me2love backend servers"})
 })
-app.listen(port,()=>(console.log('server runinng ')));
+App.listen(port,()=>(console.log('server runinng ')));
