@@ -6,13 +6,10 @@ const UserRoutes= require('./routes/userroutes')
 
 
 
-if (process.env.NODE_ENV !== 'production') {
-    require('dotenv').config();
-  } 
-  
+process.env.NODE_ENV !== "production" ? require("dotenv").config() : null;
 connectDB();
 const Port = process.env.Port || 8080;
-
+console.log(process.env.Port)
 App.use(cors())
 App.use(express.json({extended:false}));
 App.use('/api/v1',UserRoutes)
