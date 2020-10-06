@@ -11,7 +11,7 @@ if (process.env.NODE_ENV !== 'production') {
   } 
   
 connectDB();
-const Port = process.env.Port || 8081;
+const Port = process.env.Port || 8080;
 
 App.use(cors())
 App.use(express.json({extended:false}));
