@@ -93,14 +93,13 @@ exports.UpdateUserData = async function (req, res) {
     lastName,
     Age,
   } = req.body;
-  console.log(lastName);
-  UserSchema.findByIdAndUpdate(
-    { _id: req.body.id },
-    { firstName, county, state, country, Gender, lastSeen, lastName, Age },
-    { new: true, useFindAndModify: false }
-  )
+  console.log(req.body);
+  UserSchema.findByIdAndUpdate({ _id: req.body.id }, req.body, {
+    new: true,
+    useFindAndModify: false,
+  })
     .then((user) => {
-      console.log(user);
+      // console.log(user);
       return res.json({
         userdata: user,
       });
