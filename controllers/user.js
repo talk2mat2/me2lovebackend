@@ -23,8 +23,8 @@ exports.Login = async function (req, res) {
           "user with this email is not registered with us, concider registering",
       });
     } else if (user) {
-       const userPassword=user.Password
-       
+      const userPassword = user.Password;
+
       // console.log(bcrypt.compareSync(password, user.password))
       if (!user.verifyPassword(Password)) {
         res
@@ -43,37 +43,69 @@ exports.Login = async function (req, res) {
   });
 };
 
-exports.Register = async(req, res) => {
-  const {
-    firstName,
-    lastName,
-    Email,
-    Password,
-    Password2,
-   
-  } = req.body;
-
+exports.Register = async (req, res) => {
+  const { firstName, lastName, Email, Password, Password2 } = req.body;
 
   if (!validateEmail(Email)) {
-    return res.status(404).json({ oops: "pls use a valid email address to register" });
+    return res
+      .status(404)
+      .json({ oops: "pls use a valid email address to register" });
   }
-  if (Password2!=Password) {
+  if (Password2 != Password) {
     return res.status(404).json({ oops: "both password dont match" });
   }
-  if (!Password2||!Password||!lastName||!firstName||! Email) {
+  if (!Password2 || !Password || !lastName || !firstName || !Email) {
     return res.status(404).json({ oops: "you didnt fill all values required" });
   }
-  await UserSchema.findOne({Email:Email}).then(user=>{if (user){
-      return res.status(401).send({'message':`a user with email ${Email}is already registred, try to login`})
-  }})
- try{ const Passwordhash=bcrypt.hashSync(Password, 10);
-    const newUser= new UserSchema({firstName,lastName,Email,Password:Passwordhash})
-    await newUser.save()
-return res.status(200).send({message:"account registered successfully"})
-}
-    catch(err){
-        console.log(err)
-        return res.status(501).send({message:"error occured pls try again or contact admin"})
+  await UserSchema.findOne({ Email: Email }).then((user) => {
+    if (user) {
+      return res.status(401).send({
+        message: `a user with email ${Email}is already registred, try to login`,
+      });
     }
-  
+  });
+  try {
+    const Passwordhash = bcrypt.hashSync(Password, 10);
+    const newUser = new UserSchema({
+      firstName,
+      lastName,
+      Email,
+      Password: Passwordhash,
+    });
+    await newUser.save();
+    return res.status(200).send({ message: "account registered successfully" });
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(501)
+      .send({ message: "error occured pls try again or contact admin" });
+  }
+};
+
+exports.UpdateUserData = async function (req, res) {
+  const {
+    firstName,
+    county,
+    state,
+    country,
+    Gender,
+    lastSeen,
+    lastName,
+    Age,
+  } = req.body;
+  console.log(lastName);
+  UserSchema.findByIdAndUpdate(
+    { _id: req.body.id },
+    { firstName, county, state, country, Gender, lastSeen, lastName, Age },
+    { new: true, useFindAndModify: false }
+  )
+    .then((user) => {
+      console.log(user);
+      return res.json({
+        userdata: user,
+      });
+    })
+    .catch((err) => {
+      res.status(401).send({ err: "an error occured,unable to send" });
+    });
 };

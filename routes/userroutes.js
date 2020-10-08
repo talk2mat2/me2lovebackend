@@ -1,19 +1,13 @@
-const {LoginbyJWT}= require ('../middlewares/auth')
-const express = require('express')
-const {Login,Register} = require('../controllers/user')
-const { Console } = require('console')
+const { LoginbyJWT } = require("../middlewares/auth");
+const express = require("express");
+const { Login, Register, UpdateUserData } = require("../controllers/user");
 
-const Router= express.Router()
+const Router = express.Router();
 
+Router.post("/login", Login);
 
+Router.post("/Register", Register);
 
+Router.post("/Update", LoginbyJWT, UpdateUserData);
 
-Router.post('/login',Login)
-
-Router.post('/Register',Register)
-
-
-
-
-
-module.exports= Router
+module.exports = Router;
