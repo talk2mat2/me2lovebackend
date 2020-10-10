@@ -90,6 +90,8 @@ exports.UpdateUserData = async function (req, res) {
     lastSeen,
     lastName,
     Age,
+    aboutMe,
+    Education,
   } = req.body;
   const params = {
     firstName,
@@ -100,6 +102,8 @@ exports.UpdateUserData = async function (req, res) {
     lastSeen,
     lastName,
     Age,
+    aboutMe,
+    Education,
   };
   for (let prop in params) if (!params[prop]) delete params[prop];
 
