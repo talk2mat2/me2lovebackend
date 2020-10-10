@@ -12,7 +12,7 @@ const UserSchema = new Schema({
   Gender: { type: String },
   county: String,
   country: String,
-  Email: { type: String, required: true },
+  Email: { type: String, required: true,unique=true },
   Password: { type: String, required: true },
   state: String,
   RegisterdDate: { type: Date, default: Date.now },
