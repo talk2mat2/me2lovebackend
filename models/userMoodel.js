@@ -15,7 +15,7 @@ const UserSchema = new Schema({
   Email: { type: String, required: true, unique: true },
   Password: { type: String, required: true },
   state: String,
-  RegisterdDate: { type: Date, default: Date.now },
+  RegisterdDate: { type: Date },
   lastSeen: { type: Date, default: Date.now },
   offLineMessage: [{ Body: String, Sender: String }],
   Pictures: [{ url: String }],

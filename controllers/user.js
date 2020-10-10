@@ -63,12 +63,14 @@ exports.Register = async (req, res) => {
     }
   });
   try {
+    const RegisterdDate = Date.now;
     const Passwordhash = bcrypt.hashSync(Password, 10);
     const newUser = new UserSchema({
       firstName,
       lastName,
       Email,
       Password: Passwordhash,
+      RegisterdDate,
     });
     await newUser.save();
     return res.status(200).send({ message: "account registered successfully" });
