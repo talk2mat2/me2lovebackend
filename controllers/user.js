@@ -23,8 +23,6 @@ exports.Login = async function (req, res) {
           "user with this email is not registered with us, concider registering",
       });
     } else if (user) {
-      const userPassword = user.Password;
-
       // console.log(bcrypt.compareSync(password, user.password))
       if (!user.verifyPassword(Password)) {
         res

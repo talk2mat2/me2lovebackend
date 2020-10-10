@@ -5,6 +5,9 @@ const { Schema } = mongoose;
 const UserSchema = new Schema({
   firstName: { type: String, required: true }, // String is shorthand for {type: String}
   lastName: String,
+  Education: String,
+  aboutMe: String,
+
   Age: Number,
   Gender: { type: String },
   county: String,
