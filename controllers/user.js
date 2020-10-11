@@ -144,6 +144,7 @@ exports.UpdateUserData = async function (req, res) {
   )
     .then((user) => {
       // console.log(user);
+      delete user.password.password;
       return res.json({
         userdata: user,
       });
