@@ -141,7 +141,7 @@ exports.UpdateUserData = async function (req, res) {
     if (
       params[prop] === "null" ||
       params[prop] === undefined ||
-      params[prop].length < 1
+      params[prop] === null
     ) {
       delete params[prop];
     }
