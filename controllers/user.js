@@ -84,6 +84,7 @@ exports.Register = async (req, res) => {
 };
 
 exports.UpdateUserData = async function (req, res) {
+  console.log(req.body);
   const {
     interestedInMen,
     Football,
@@ -109,6 +110,9 @@ exports.UpdateUserData = async function (req, res) {
     aboutMe,
     Education,
   } = req.body;
+  // for (values in req.body) {
+  //   if (req.body[values] === "Null") return (req.body[values] = null);
+  // }
   const params = {
     interestedInMen,
     Football,
@@ -144,13 +148,12 @@ exports.UpdateUserData = async function (req, res) {
     { new: true, useFindAndModify: false }
   )
     .then((user) => {
-      // console.log(user);
-      delete user.password.password;
       return res.json({
         userdata: user,
       });
     })
     .catch((err) => {
+      console.log(err);
       res.status(401).send({ err: "an error occured,unable to send" });
     });
 };
