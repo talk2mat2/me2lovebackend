@@ -154,8 +154,6 @@ exports.UpdateUserData = async function (req, res) {
     },
     { new: true, useFindAndModify: false }
   )
-    .select("-Password")
-    .select("-Email")
     .then((user) => {
       return res.json({
         userdata: user,
