@@ -22,7 +22,7 @@ const UserSchema = new Schema({
   Animals: { type: Boolean, default: false },
   Smoking: { type: Boolean, default: false },
   Drinking: { type: Boolean, default: false },
-  interestedInWome: { type: Boolean, default: false },
+  interestedInWomen: { type: Boolean, default: false },
   county: String,
   country: String,
   Email: { type: String, required: true, unique: true },
