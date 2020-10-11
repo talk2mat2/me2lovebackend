@@ -84,7 +84,6 @@ exports.Register = async (req, res) => {
 };
 
 exports.UpdateUserData = async function (req, res) {
-  console.log(req.body);
   const {
     interestedInMen,
     Football,
@@ -138,7 +137,15 @@ exports.UpdateUserData = async function (req, res) {
     aboutMe,
     Education,
   };
-  for (let prop in params) if (!params[prop]) delete params[prop];
+  for (let prop in params) {
+    if (
+      params[prop] === "null" ||
+      params[prop] === undefined ||
+      params[prop].length < 1
+    ) {
+      delete params[prop];
+    }
+  }
 
   UserSchema.findByIdAndUpdate(
     { _id: req.body.id },
@@ -147,6 +154,8 @@ exports.UpdateUserData = async function (req, res) {
     },
     { new: true, useFindAndModify: false }
   )
+    .select("-Password")
+    .select("-Email")
     .then((user) => {
       return res.json({
         userdata: user,
