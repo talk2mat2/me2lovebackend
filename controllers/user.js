@@ -63,7 +63,8 @@ exports.Register = async (req, res) => {
     }
   });
   try {
-    const RegisterdDate = Date.now;
+    const RegisterdDate = new Date();
+
     const Passwordhash = bcrypt.hashSync(Password, 10);
     const newUser = new UserSchema({
       firstName,
