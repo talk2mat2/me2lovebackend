@@ -104,6 +104,7 @@ exports.UpdateUserData = async function (req, res) {
     country,
     Gender,
     lastSeen,
+    Pictures,
     lastName,
     Age,
     aboutMe,
@@ -130,6 +131,7 @@ exports.UpdateUserData = async function (req, res) {
     county,
     state,
     country,
+    Pictures,
     Gender,
     lastSeen,
     lastName,
@@ -146,7 +148,7 @@ exports.UpdateUserData = async function (req, res) {
       delete params[prop];
     }
   }
-
+  // console.log(params);
   UserSchema.findByIdAndUpdate(
     { _id: req.body.id },
     {
