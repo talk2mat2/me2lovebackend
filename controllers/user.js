@@ -10,12 +10,15 @@ function validateEmail(email) {
 
 exports.Login = async function (req, res) {
   const { Email, Password } = req.body;
+  if (!Password || !Email) {
+    return res.json({ errpr: "pls provide a valid password and email" });
+  }
 
   if (!validateEmail(Email)) {
     return res.status(404).json({ oops: "pls use a valid email address" });
   }
 
-  UserSchema.findOne({ Email }, function (err, user) {
+  UserSchema.findOne({ Email }, async function (err, user) {
     if (err) throw err;
     if (!user) {
       res.status(404).json({
@@ -23,13 +26,15 @@ exports.Login = async function (req, res) {
           "user with this email is not registered with us, concider registering",
       });
     } else if (user) {
-      // console.log(bcrypt.compareSync(password, user.password))
-      if (!user.verifyPassword(Password)) {
-        res
+      console.log(Password);
+      const match = await user.verifyPassword(Password);
+      if (!match) {
+        return res
           .status(401)
           .json({ message: "oopss! , the entered password is not correct." });
       } else {
-        user.password = "****";
+        console.log(match);
+        user.Password = "";
         return res.json({
           userdata: user,
           token: jwt.sign({ user: user }, process.env.JWTKEY, {
@@ -103,7 +108,7 @@ exports.UpdateUserData = async function (req, res) {
     state,
     country,
     Gender,
-    lastSeen,
+
     Pictures,
     lastName,
     Age,
@@ -133,7 +138,7 @@ exports.UpdateUserData = async function (req, res) {
     country,
     Pictures,
     Gender,
-    lastSeen,
+
     lastName,
     Age,
     aboutMe,

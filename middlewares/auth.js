@@ -1,15 +1,24 @@
 const jwt = require("jsonwebtoken");
 
-exports.LoginbyJWT = function (req, res, next) {
+const UserSchema = require("../models/userMoodel");
+
+exports.LoginbyJWT = async function (req, res, next) {
   const token = req.headers.authorization;
-  jwt.verify(token, process.env.JWTKEY, function (err, decodedToken) {
+  jwt.verify(token, process.env.JWTKEY, async function (err, decodedToken) {
     if (err) {
       return res
         .status(401)
         .send({ message: "auth failed, login to continue" });
     } else {
       req.body.id = decodedToken.user._id;
-      next();
+      const todaysdate = new Date();
+
+      await UserSchema.findByIdAndUpdate(
+        { _id: req.body.id },
+        { lastSeen: todaysdate },
+        { useFindAndModify: false }
+      ).catch((err) => console.log(err)),
+        next();
     }
   });
 };

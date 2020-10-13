@@ -36,8 +36,14 @@ const UserSchema = new Schema({
   Meta: [{ favs: String }],
 });
 
-UserSchema.methods.verifyPassword = function (Password) {
-  return bcrypt.compare(Password, this.Password);
+UserSchema.methods.verifyPassword = async function (Password) {
+  const match = await bcrypt.compare(Password, this.Password);
+
+  if (match) {
+    return true;
+  } else {
+    return false;
+  }
 };
 
 module.exports = mongoose.model("Users", UserSchema);
