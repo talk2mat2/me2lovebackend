@@ -1,6 +1,8 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
+const multer = require("multer");
+
 const UserSchema = require("../models/userMoodel");
 
 function validateEmail(email) {
@@ -11,11 +13,13 @@ function validateEmail(email) {
 exports.Login = async function (req, res) {
   const { Email, Password } = req.body;
   if (!Password || !Email) {
-    return res.json({ errpr: "pls provide a valid password and email" });
+    return res
+      .status(404)
+      .send({ message: "pls provide a valid password and email" });
   }
 
   if (!validateEmail(Email)) {
-    return res.status(404).json({ oops: "pls use a valid email address" });
+    return res.status(404).json({ message: "pls use a valid email address" });
   }
 
   UserSchema.findOne({ Email }, async function (err, user) {
@@ -52,13 +56,15 @@ exports.Register = async (req, res) => {
   if (!validateEmail(Email)) {
     return res
       .status(404)
-      .json({ oops: "pls use a valid email address to register" });
+      .json({ message: "pls use a valid email address to register" });
   }
   if (Password2 != Password) {
-    return res.status(404).json({ oops: "both password dont match" });
+    return res.status(404).json({ message: "both password dont match" });
   }
   if (!Password2 || !Password || !lastName || !firstName || !Email) {
-    return res.status(404).json({ oops: "you didnt fill all values required" });
+    return res
+      .status(404)
+      .json({ message: "you didnt fill all values required" });
   }
   await UserSchema.findOne({ Email: Email }).then((user) => {
     if (user) {
