@@ -88,6 +88,7 @@ Router.post(
                   });
                 }
                 console.log("file uploaded to Cloudinary server");
+                console.log("file uploaded to Cloudinary server");
 
                 // remove file from server
                 const fs = require("fs");
