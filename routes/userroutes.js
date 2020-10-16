@@ -1,3 +1,5 @@
+const { v4: uuidv4 } = require("uuid");
+
 const { LoginbyJWT } = require("../middlewares/auth");
 const express = require("express");
 const multer = require("multer");
@@ -5,9 +7,9 @@ const path = require("path");
 const Router = express.Router();
 const cloudinary = require("cloudinary").v2;
 cloudinary.config({
-  cloud_name: "martinsc",
-  api_key: "724821836145235",
-  api_secret: "atKrgqsSOhIobEEhOByHqeb_-tk",
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEYS_CLOUD,
+  api_secret: process.env.API_SECRET_CLOUD,
 });
 
 const UserSchema = require("../models/userMoodel");
@@ -54,8 +56,8 @@ Router.post(
   upload.single("file"),
   LoginbyJWT,
   async (req, res) => {
-    console.log(req.body);
-    console.log(req.file);
+    // console.log(req.body);
+    // console.log(req.file);
     const file = req.file;
 
     const filter = { _id: req.body.id };
@@ -70,7 +72,8 @@ Router.post(
           // const uniqueFilename = req.user.id + req.user.firstname;
 
           if (file) {
-            const uniqueFilename = `${req.body.id}me2love`;
+            const uniqueFilename = `${uuidv4()}me2love`;
+
             cloudinary.uploader.upload(
               Path,
               {
@@ -90,7 +93,7 @@ Router.post(
                 const fs = require("fs");
                 fs.unlinkSync(Path);
                 // return image details
-                console.log(image.secure_url);
+                // console.log(image.secure_url);
 
                 user.Pictures.push({ url: image.secure_url });
                 user.save();
@@ -113,5 +116,26 @@ Router.post(
       });
   }
 );
+
+Router.delete("/image/delete/:id", LoginbyJWT, (req, res) => {
+  //   const uniqueFilename = `${uuidv4()}me2love`;
+  const id = req.params.id;
+  const updatedId = id.split(".");
+  const uniqueFilename = `${updatedId[0]}`;
+  // const id = req.params;
+  const values = {
+    public_id: `image/${req.body.id}/${uniqueFilename}`,
+    tags: `image`,
+  };
+
+  cloudinary.uploader.destroy(values.public_id, (err, success) => {
+    if (err) {
+      console.log(err);
+      return res.status(404).send({ messge: "an error occured on the server" });
+    } else {
+      return res.status(200).send(success);
+    }
+  });
+});
 
 module.exports = Router;
