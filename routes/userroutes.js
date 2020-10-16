@@ -13,7 +13,12 @@ cloudinary.config({
 });
 
 const UserSchema = require("../models/userMoodel");
-const { Login, Register, UpdateUserData } = require("../controllers/user");
+const {
+  Login,
+  Register,
+  UpdateUserData,
+  searchUsers,
+} = require("../controllers/user");
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -50,6 +55,7 @@ Router.post("/login", Login);
 Router.post("/Register", Register);
 
 Router.post("/Update", LoginbyJWT, UpdateUserData);
+Router.get("/searchUsers", LoginbyJWT, searchUsers);
 Router.post(
   "/Update/UploadImg",
 
@@ -87,7 +93,7 @@ Router.post(
                     message: "unable to perfom the requested operation",
                   });
                 }
-                console.log("file uploaded to Cloudinary server");
+
                 console.log("file uploaded to Cloudinary server");
 
                 // remove file from server

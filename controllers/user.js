@@ -178,3 +178,15 @@ exports.UpdateUserData = async function (req, res) {
       res.status(401).send({ err: "an error occured,unable to send" });
     });
 };
+
+//search all users within
+exports.searchUsers = async (req, res) => {
+  UserSchema.find({})
+    .then((response) => {
+      return res.status(200).send({ userdata: response });
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.status(404).send({ message: "no users found" });
+    });
+};

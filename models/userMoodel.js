@@ -9,7 +9,7 @@ const UserSchema = new Schema({
   aboutMe: String,
 
   Age: Number,
-  Gender: { type: String },
+  Gender: { type: String, required: true },
   interestedInMen: { type: Boolean, default: false },
   Football: { type: Boolean, default: false },
   Bassketball: { type: Boolean, default: false },
