@@ -25,18 +25,18 @@ var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(
       null,
-      path.join(__dirname, "/upload")
+      "./upload"
       //  path.join(__dirname, "../public/image")
     );
   },
-  filename: function (req, file, cb) {
-    cb(
-      null,
-      Date.now() + path.extname(file.originalname)
+  // filename: function (req, file, cb) {
+  //   cb(
+  //     null,
+  //     Date.now() + path.extname(file.originalname)
 
-      // file.fieldname + "-" + `${uuidv4()}` + path.extname(file.originalname)
-    );
-  },
+  // file.fieldname + "-" + `${uuidv4()}` + path.extname(file.originalname)
+  // );
+  // },
 });
 
 const fileFilter = async (req, file, cb) => {
