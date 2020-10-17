@@ -11,6 +11,7 @@ cloudinary.config({
   api_key: process.env.API_KEYS_CLOUD,
   api_secret: process.env.API_SECRET_CLOUD,
 });
+const fs = require("fs");
 
 const UserSchema = require("../models/userMoodel");
 const {
@@ -22,17 +23,17 @@ const {
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "./public/image");
+    cb(null, "./public/image/");
   },
   filename: function (req, file, cb) {
     cb(
       null,
-      file.fieldname + "-" + req.body.id + path.extname(file.originalname)
+      file.fieldname + "-" + `${uuidv4()}` + path.extname(file.originalname)
     );
   },
 });
 
-const fileFilter = (req, file, cb) => {
+const fileFilter = async (req, file, cb) => {
   if (
     file.mimetype === "image/jpg" ||
     file.mimetype === "image/jpeg" ||
@@ -58,15 +59,16 @@ Router.post("/Update", LoginbyJWT, UpdateUserData);
 Router.get("/searchUsers", LoginbyJWT, searchUsers);
 Router.post(
   "/Update/UploadImg",
-
+  LoginbyJWT,
   upload.single("file"),
   LoginbyJWT,
   async (req, res) => {
-    // console.log(req.body);
-    // console.log(req.file);
+    console.log(req.body);
+    console.log(req.file);
     const file = req.file;
 
     const filter = { _id: req.body.id };
+    const Path = req.file.path;
 
     await UserSchema.findOne(filter)
       .then((user) => {
@@ -74,7 +76,7 @@ Router.post(
           if (!file) {
             return res.status(501).send({ message: "no image provided" });
           }
-          const Path = req.file.path;
+
           // const uniqueFilename = req.user.id + req.user.firstname;
 
           if (file) {
@@ -97,7 +99,7 @@ Router.post(
                 console.log("file uploaded to Cloudinary server");
 
                 // remove file from server
-                const fs = require("fs");
+                // const fs = require("fs");
                 fs.unlinkSync(Path);
                 // return image details
                 // console.log(image.secure_url);
@@ -109,8 +111,9 @@ Router.post(
             );
           }
         } else {
+          fs.unlinkSync(Path);
           return res.status(501).send({
-            message: "maximum picture numbers  of 5reached",
+            message: "maximum picture numbers  of 5 images reached",
           });
         }
       })
