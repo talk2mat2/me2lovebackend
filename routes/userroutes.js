@@ -20,7 +20,7 @@ const {
   UpdateUserData,
   searchUsers,
 } = require("../controllers/user");
-
+console.log(`${"./"}`);
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(
