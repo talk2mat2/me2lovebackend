@@ -20,7 +20,7 @@ const {
   UpdateUserData,
   searchUsers,
 } = require("../controllers/user");
-console.log(`${"./"}`);
+
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(
@@ -29,14 +29,13 @@ var storage = multer.diskStorage({
       //  path.join(__dirname, "../public/image")
     );
   },
-  // filename: function (req, file, cb) {
-  //   cb(
-  //     null,
-  //     Date.now() + path.extname(file.originalname)
+  filename: function (req, file, cb) {
+    cb(
+      null,
 
-  // file.fieldname + "-" + `${uuidv4()}` + path.extname(file.originalname)
-  // );
-  // },
+      file.fieldname + "-" + `${uuidv4()}` + path.extname(file.originalname)
+    );
+  },
 });
 
 const fileFilter = async (req, file, cb) => {
