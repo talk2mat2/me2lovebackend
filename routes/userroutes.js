@@ -23,12 +23,18 @@ const {
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, "../public/image"));
+    cb(
+      null,
+      path.join(__dirname, "../upload")
+      //  path.join(__dirname, "../public/image")
+    );
   },
   filename: function (req, file, cb) {
     cb(
       null,
-      file.fieldname + "-" + `${uuidv4()}` + path.extname(file.originalname)
+      Date.now() + path.extname(file.originalname)
+
+      // file.fieldname + "-" + `${uuidv4()}` + path.extname(file.originalname)
     );
   },
 });
