@@ -19,6 +19,7 @@ const {
   Register,
   UpdateUserData,
   searchUsers,
+  searchUserById,
 } = require("../controllers/user");
 
 var storage = multer.diskStorage({
@@ -62,6 +63,7 @@ Router.post("/Register", Register);
 
 Router.post("/Update", LoginbyJWT, UpdateUserData);
 Router.get("/searchUsers", LoginbyJWT, searchUsers);
+Router.get("/searchUserById/:id", LoginbyJWT, searchUserById);
 Router.post(
   "/Update/UploadImg",
   LoginbyJWT,

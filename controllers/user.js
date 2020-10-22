@@ -51,7 +51,7 @@ exports.Login = async function (req, res) {
 };
 
 exports.Register = async (req, res) => {
-  const { firstName, lastName, Email, Password, Password2 } = req.body;
+  const { firstName, lastName, Email, Password, Password2, Gender } = req.body;
 
   if (!validateEmail(Email)) {
     return res
@@ -83,14 +83,16 @@ exports.Register = async (req, res) => {
       Email,
       Password: Passwordhash,
       RegisterdDate,
+      Gender,
     });
     await newUser.save();
     return res.status(200).send({ message: "account registered successfully" });
   } catch (err) {
     console.log(err);
-    return res
-      .status(501)
-      .send({ message: "error occured pls try again or contact admin" });
+    return res.status(501).send({
+      message: "error occured pls try again or contact admin",
+      err: err,
+    });
   }
 };
 
@@ -182,6 +184,25 @@ exports.UpdateUserData = async function (req, res) {
 //search all users within
 exports.searchUsers = async (req, res) => {
   UserSchema.find({})
+    .select("-Password")
+    .select("-Email")
+    .select("-offLineMessage")
+    .then((response) => {
+      return res.status(200).send({ userdata: response });
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.status(404).send({ message: "no users found" });
+    });
+};
+//fecth user details by id
+exports.searchUserById = async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+  UserSchema.findById(id)
+    .select("-Password")
+    .select("-Email")
+    .select("-offLineMessage")
     .then((response) => {
       return res.status(200).send({ userdata: response });
     })
