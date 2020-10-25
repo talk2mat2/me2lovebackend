@@ -30,14 +30,12 @@ exports.Login = async function (req, res) {
           "user with this email is not registered with us, concider registering",
       });
     } else if (user) {
-      console.log(Password);
       const match = await user.verifyPassword(Password);
       if (!match) {
         return res
           .status(401)
           .json({ message: "oopss! , the entered password is not correct." });
       } else {
-        console.log(match);
         user.Password = "";
         return res.json({
           userdata: user,
