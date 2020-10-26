@@ -59,10 +59,10 @@ exports.Register = async (req, res) => {
   if (Password2 != Password) {
     return res.status(404).json({ message: "both password dont match" });
   }
-  if (!Password2 || !Password || !lastName || !firstName || !Email) {
-    return res
-      .status(404)
-      .json({ message: "you didnt fill all values required" });
+  if (!Password2 || !Password || !lastName || !firstName || !Email || !Gender) {
+    return res.status(404).json({
+      message: "oops! you didnt fill all values required,kindly try again",
+    });
   }
   await UserSchema.findOne({ Email: Email }).then((user) => {
     if (user) {

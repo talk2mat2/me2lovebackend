@@ -4,13 +4,14 @@ const connectDB = require("./db/connection");
 const cors = require("cors");
 const UserRoutes = require("./routes/userroutes");
 const mongoose = require("mongoose");
+const { SocketIo } = require("./socket.io");
 const UserSchema = require("./models/userMoodel");
-
 process.env.NODE_ENV !== "production" ? require("dotenv").config() : null;
 connectDB();
 const Port = process.env.PORT || 8080;
 
 App.use(cors());
+
 App.use(express.json({ extended: false }));
 App.use("/api/v1", UserRoutes);
 App.get("/", (req, res) => {
@@ -81,6 +82,7 @@ io.on("connection", async (socket) => {
   socket.on("disconnect", async () => {
     //if the user logges out the system write his status to offline at the database here
     //so that others can see him/her as offline
+    socket.removeAllListeners("newMsgReceived");
     await UserSchema.findById(userId)
       .select("-Password")
       .select("-Email")
