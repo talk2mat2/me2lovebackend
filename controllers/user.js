@@ -119,7 +119,6 @@ exports.UpdateUserData = async function (req, res) {
     country,
     Gender,
 
-    Pictures,
     lastName,
     Age,
     aboutMe,
@@ -148,7 +147,7 @@ exports.UpdateUserData = async function (req, res) {
     county,
     state,
     country,
-    Pictures,
+
     Gender,
 
     lastName,
