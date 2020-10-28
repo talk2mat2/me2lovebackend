@@ -135,6 +135,7 @@ Router.post(
 );
 
 Router.delete("/image/delete/:id", LoginbyJWT, (req, res) => {
+  console.log(req.params.id);
   //   const uniqueFilename = `${uuidv4()}me2love`;
   const id = req.params.id;
   const updatedId = id.split(".");
@@ -150,6 +151,14 @@ Router.delete("/image/delete/:id", LoginbyJWT, (req, res) => {
       console.log(err);
       return res.status(404).send({ messge: "an error occured on the server" });
     } else {
+      // console.log("deleted");
+      // console.log(success);
+      // UserSchema.findById(req.body.id).then((result) => {
+      //   console.log(result.Pictures);
+      //   console.log(
+      //     uniqueFilename.split("-")[uniqueFilename.split("-").length - 1]
+      //   );
+      // });
       return res.status(200).send(success);
     }
   });

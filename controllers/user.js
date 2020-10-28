@@ -118,7 +118,7 @@ exports.UpdateUserData = async function (req, res) {
     state,
     country,
     Gender,
-
+    Pictures,
     lastName,
     Age,
     aboutMe,
@@ -128,6 +128,7 @@ exports.UpdateUserData = async function (req, res) {
   //   if (req.body[values] === "Null") return (req.body[values] = null);
   // }
   const params = {
+    Pictures,
     longitude,
     latitude,
     interestedInMen,
