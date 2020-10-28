@@ -112,7 +112,7 @@ Router.post(
                 // console.log(image.secure_url);
 
                 user.Pictures.push({ url: image.secure_url });
-                user.update();
+                user.save();
                 return res.status(200).send({ userdata: user });
               }
             );
