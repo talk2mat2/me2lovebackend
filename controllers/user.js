@@ -96,6 +96,9 @@ exports.Register = async (req, res) => {
 
 exports.UpdateUserData = async function (req, res) {
   const {
+    longitude,
+    Number,
+    latitude,
     interestedInMen,
     Football,
     Bassketball,
@@ -125,6 +128,8 @@ exports.UpdateUserData = async function (req, res) {
   //   if (req.body[values] === "Null") return (req.body[values] = null);
   // }
   const params = {
+    longitude,
+    latitude,
     interestedInMen,
     Football,
     Bassketball,
@@ -183,7 +188,7 @@ exports.UpdateUserData = async function (req, res) {
 exports.searchUsers = async (req, res) => {
   // var filters = JSON.parse(req.query.filters);
   // console.log(req.query.filters);
-  var filters = JSON.parse(req.query.filters);
+  var filters = JSON.parse(req.query.filters) || {};
 
   // console.log(filters["$and"][0]);
   UserSchema.find(filters)
