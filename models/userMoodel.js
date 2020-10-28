@@ -27,6 +27,7 @@ const UserSchema = new Schema({
   county: String,
   country: String,
   longitude: Number,
+  distance: Number,
   latitude: Number,
   Email: { type: String, required: true, unique: true },
   Password: { type: String, required: true },

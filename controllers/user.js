@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const haversine = require("haversine");
 
 const multer = require("multer");
 
@@ -184,19 +185,53 @@ exports.UpdateUserData = async function (req, res) {
     });
 };
 
+function distance(lat1, lon1, lat2, lon2) {
+  var p = 0.017453292519943295; // Math.PI / 180
+  var c = Math.cos;
+  var a =
+    0.5 -
+    c((lat2 - lat1) * p) / 2 +
+    (c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p))) / 2;
+
+  return 12742 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
+}
+
 //search all users within
 exports.searchUsers = async (req, res) => {
   // var filters = JSON.parse(req.query.filters);
   // console.log(req.query.filters);
-  var filters = JSON.parse(req.query.filters) || {};
+  // const { id } = req.body.id;
 
+  var filters = JSON.parse(req.query.filters) || {};
+  var CurrentUser = await UserSchema.findById(req.body.id);
+  // console.log(CurrentUser);
   // console.log(filters["$and"][0]);
   UserSchema.find(filters)
     .select("-Password")
     .select("-Email")
     .select("-offLineMessage")
-    .then((response) => {
+    .then(async (response) => {
       console.log(response.length);
+      await response.map(async (user, index) => {
+        if (
+          user.longitude &
+          user.latitude &
+          CurrentUser.longitude &
+          CurrentUser.latitude
+        ) {
+          //here we check distance of search resulte users to the current user
+          const userdistance = await haversine(
+            {
+              latitude: CurrentUser.latitude,
+              longitude: CurrentUser.longitude,
+            },
+            { latitude: user.latitude, longitude: user.longitude },
+            { unit: "meter" }
+          );
+          response[index].distance = userdistance;
+          console.log(user.distance);
+        }
+      });
       return res.status(200).send({ userdata: response });
     })
     .catch((err) => {
