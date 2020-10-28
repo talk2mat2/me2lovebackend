@@ -181,11 +181,17 @@ exports.UpdateUserData = async function (req, res) {
 
 //search all users within
 exports.searchUsers = async (req, res) => {
-  UserSchema.find({})
+  // var filters = JSON.parse(req.query.filters);
+  // console.log(req.query.filters);
+  var filters = JSON.parse(req.query.filters);
+
+  // console.log(filters["$and"][0]);
+  UserSchema.find(filters)
     .select("-Password")
     .select("-Email")
     .select("-offLineMessage")
     .then((response) => {
+      console.log(response.length);
       return res.status(200).send({ userdata: response });
     })
     .catch((err) => {
