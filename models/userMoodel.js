@@ -26,6 +26,8 @@ const UserSchema = new Schema({
   interestedInWomen: { type: Boolean, default: false },
   county: String,
   country: String,
+  longitude: Number,
+  latitude: Number,
   Email: { type: String, required: true, unique: true },
   Password: { type: String, required: true },
   state: String,
