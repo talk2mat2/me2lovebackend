@@ -4,6 +4,7 @@ const connectDB = require("./db/connection");
 const cors = require("cors");
 const UserRoutes = require("./routes/userroutes");
 const mongoose = require("mongoose");
+const path = require('path')
 const { SocketIo } = require("./socket.io");
 const UserSchema = require("./models/userMoodel");
 process.env.NODE_ENV !== "production" ? require("dotenv").config() : null;
@@ -13,10 +14,15 @@ const Port = process.env.PORT || 8080;
 App.use(cors());
 
 App.use(express.json({ extended: false }));
+App.set('views',path.join(__dirname,'views'))
+App.set('view engine','ejs')
 App.use("/api/v1", UserRoutes);
 App.get("/", (req, res) => {
   res.status(200).send({ message: "welcome to me2love backend servers" });
 });
+App.get('/about&privacy',(req,res)=>{
+res.render('aboutprivacy')
+})
 const server = App.listen(Port, (err, successs) => {
   if (err) throw err;
   console.log(`server running on port ${Port}`);
