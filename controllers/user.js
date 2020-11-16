@@ -203,10 +203,32 @@ exports.searchUsers = async (req, res) => {
   // const { id } = req.body.id;
 
   var filters = JSON.parse(req.query.filters) || {};
+  var pageNo = JSON.parse(req.query.pageNo) || 0;
+  const limit = 15;
+  var skip = pageNo * (limit );
+  var totalCount;
+  console.log('pageNo',pageNo)
+
   var CurrentUser = await UserSchema.findById(req.body.id);
   // console.log(CurrentUser);
   // console.log(filters["$and"][0]);
-  UserSchema.find(filters)
+ await UserSchema.countDocuments(filters,(err,count)=>{
+   if(err){
+    totalCount=0
+   }
+   else{
+    totalCount=count
+   }
+ })
+ if(totalCount==0){
+  return res.status(404).send({ message: "no users found" });
+ }
+ 
+   
+
+
+
+  UserSchema.find(filters).skip(skip).limit(limit)
     .select("-Password")
     .select("-Email")
     .select("-offLineMessage")
@@ -229,9 +251,10 @@ exports.searchUsers = async (req, res) => {
             { unit: "meter" }
           );
           response[index].distance = userdistance;
-          console.log(user.distance);
+          // console.log(user.distance);
         }
       });
+      response.totalRecords=totalCount
       return res.status(200).send({ userdata: response });
     })
     .catch((err) => {
@@ -248,6 +271,7 @@ exports.searchUserById = async (req, res) => {
     .select("-Email")
     .select("-offLineMessage")
     .then((response) => {
+     
       return res.status(200).send({ userdata: response });
     })
     .catch((err) => {

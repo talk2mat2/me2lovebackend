@@ -36,6 +36,9 @@ io.on("connection", async (socket) => {
   // console.log(userId);
 
   socket.join(userId);
+  socket.on('online',()=>{
+    //do nothing
+  })
   //check if the user has offline message, and if so we send it to him and empty the message array
   await UserSchema.findById(userId)
     .select("-Password")
